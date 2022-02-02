@@ -165,16 +165,16 @@ jobs:
         run: |
 
           # Replace links to other packages with links to the esm branch:
-          find ./deno -type f -name '*.md' -print0 | xargs -0 sed -Ei "/\/tree\/main/b; /^\[@stdlib[^:]+: https:\/\/github.com\/stdlib-js\// s/(.*)/\\1\/tree\/esm/";
+          find ./esm -type f -name '*.md' -print0 | xargs -0 sed -Ei "/\/tree\/main/b; /^\[@stdlib[^:]+: https:\/\/github.com\/stdlib-js\// s/(.*)/\\1\/tree\/esm/";
 
           # Replace reference to `@stdlib/types` with esm link:
-          find ./deno -type f -name '*.ts' -print0 | xargs -0 sed -Ei "s/\/\/\/ <reference types=\"@stdlib\/types\"\/>/\/\/\/ <reference types=\"https:\/\/cdn.jsdelivr.net\/gh\/stdlib-js\/types@esm\/index.d.ts\"\/>/g"
+          find ./esm -type f -name '*.ts' -print0 | xargs -0 sed -Ei "s/\/\/\/ <reference types=\"@stdlib\/types\"\/>/\/\/\/ <reference types=\"https:\/\/cdn.jsdelivr.net\/gh\/stdlib-js\/types@esm\/index.d.ts\"\/>/g"
 
           # Change wording of project description to avoid reference to JavaScript and Node.js:
-          find ./deno -type f -name '*.md' -print0 | xargs -0 sed -Ei "s/a standard library for JavaScript and Node.js, /a standard library /g"
+          find ./esm -type f -name '*.md' -print0 | xargs -0 sed -Ei "s/a standard library for JavaScript and Node.js, /a standard library /g"
 
           # Rewrite all `require()`s to use jsDelivr links:
-          find ./deno -type f -name '*.md' -print0 | xargs -0 sed -Ei "/require\( '@stdlib\// {
+          find ./esm -type f -name '*.md' -print0 | xargs -0 sed -Ei "/require\( '@stdlib\// {
               s/(var|let|const)\s+([a-z0-9]+)\s+=\s*require\( '([^']+)' \);/import \2 from \'\3\';/i
               s/@stdlib/https:\/\/cdn.jsdelivr.net\/gh\/stdlib-js/
               s/';/@esm\/index.mjs';/
