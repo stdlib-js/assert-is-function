@@ -139,6 +139,14 @@ jobs:
         run: |
           mkdir -p esm
           cp README.md LICENSE CONTRIBUTORS NOTICE ./esm
+          
+          # Copy TypeScript definitions to esm directory:
+          if [ -e ./docs/types/index.d.ts ]; then
+            cp ./docs/types/index.d.ts ./esm/index.d.ts
+          fi
+          if [ -d index.d.ts ]; then
+            cp index.d.ts ./esm/index.d.ts
+          fi
       - uses: actions/setup-node@v2
         with:
           node-version: 16
