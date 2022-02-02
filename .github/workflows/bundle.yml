@@ -131,3 +131,44 @@ jobs:
           user_email: 'noreply@stdlib.io'
           commit_message: 'Auto-generated commit'
           enable_jekyll: true
+  esm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Copy files to umd directory
+        run: |
+          mkdir -p esm
+          cp README.md LICENSE CONTRIBUTORS NOTICE ./esm
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+        timeout-minutes: 5
+      - name: Install production and development dependencies
+        id: install
+        run: |
+          npm install || npm install || npm install
+        timeout-minutes: 15
+      - name: Create ES Module (ESM) bundle
+        id: esm-bundle
+        uses: stdlib-js/deno-bundle-action@main
+        with:
+          target: 'esm'
+      - name: Rewrite file contents
+        run: |
+
+          # Remove `installation`, `cli`, and `c` sections:
+          find ./esm -type f -name '*.md' -print0 | xargs -0 perl -0777 -i -pe "s/<section class=\"installation\">[^<]+<\/section>//g;"
+          find ./esm -type f -name '*.md' -print0 | xargs -0 perl -0777 -i -pe "s/<section class=\"cli\">[\s\S]+<\!\-\- \/.cli \-\->//g"
+          find ./esm -type f -name '*.md' -print0 | xargs -0 perl -0777 -i -pe "s/<section class=\"c\">[\s\S]+<\!\-\- \/.c \-\->//g"
+
+      - name: Publish to esm branch
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./esm
+          publish_branch: esm
+          keep_files: true
+          user_name: 'stdlib-bot'
+          user_email: 'noreply@stdlib.io'
+          commit_message: 'Auto-generated commit'
+          enable_jekyll: true
