@@ -67,7 +67,7 @@ jobs:
 
           # Rewrite all `require()`s to use jsDelivr links:
           find ./deno -type f -name '*.md' -print0 | xargs -0 sed -Ei "/require\( '@stdlib\// {
-              s/(var|let|const)\s+([^\s]+)\s+=\s*require\( '([^']+)' \);/import \2 from \'\3\';/
+              s/(var|let|const)\s+([a-z]+)\s+=\s*require\( '([^']+)' \);/import \2 from \'\3\';/i
               s/@stdlib/https:\/\/cdn.jsdelivr.net\/gh\/stdlib-js/
               s/';/@deno\/mod.js';/
           }"
