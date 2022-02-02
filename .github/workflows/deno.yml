@@ -42,6 +42,15 @@ jobs:
           if [ -e ./docs/types/index.d.ts ]; then
             cp ./docs/types/index.d.ts ./deno/mod.d.ts
           fi
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+        timeout-minutes: 5
+      - name: Install production and development dependencies
+        id: install
+        run: |
+          npm install || npm install || npm install
+        timeout-minutes: 15
       - name: Bundle package for Deno
         id: deno-bundle
         uses: stdlib-js/deno-bundle-action@main
